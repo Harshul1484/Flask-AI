@@ -1,75 +1,16 @@
-from flask import Flask, jsonify, request
-from characterai import PyCAI
-
-app = Flask(__name__)
-
-@app.route('/', methods=['GET', 'POST'])
-def home():
-    if request.method == 'GET':
-        data = "hello world"
-        return jsonify({'data': data})
-
-@app.route('/chat/<string:msg>', methods=['GET'])
-def disp(msg):
-    token = "34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a"
-    client = PyCAI(token)
-
-    char = "AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4"
-
-    chat = client.chat.get_chat(char)
-    participants = chat['participants']
-
-    if not participants[0]['is_human']:
-        tgt = participants[0]['user']['username']
-    else:
-        tgt = participants[1]['user']['username']
-
-    data = client.chat.send_message(chat['external_id'], tgt, msg)
-
-    name = data['src_char']['participant']['name']
-    text = data['replies'][0]['text']
-
-    return jsonify({'data': text})
-
-@app.route('/chat', methods=['POST'])
-def chat():
-    if request.method == 'POST' and 'msg' in request.json:
-        msg = request.json['msg']
-        token = "34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a"
-        client = PyCAI(token)
-
-        char = "AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4"
-
-        chat = client.chat.get_chat(char)
-        participants = chat['participants']
-
-        if not participants[0]['is_human']:
-            tgt = participants[0]['user']['username']
-        else:
-            tgt = participants[1]['user']['username']
-
-        data = client.chat.send_message(chat['external_id'], tgt, msg)
-
-        name = data['src_char']['participant']['name']
-        text = data['replies'][0]['text']
-
-        return jsonify({'reply': text})
-    else:
-        return jsonify({'error': 'Invalid request or missing "msg" in JSON payload'})
-
-if __name__ == '__main__':
-    app.run(debug=False,host='0.0.0.0')
-
-
 # from flask import Flask, jsonify, request
 # from characterai import PyCAI
 
-# app = Flask(_name_)
+# app = Flask(__name__)
 
-# @app.route('/chat', methods=['POST'])
-# def chat():
-#     msg = request.json['msg']
+# @app.route('/', methods=['GET', 'POST'])
+# def home():
+#     if request.method == 'GET':
+#         data = "hello world"
+#         return jsonify({'data': data})
 
+# @app.route('/chat/<string:msg>', methods=['GET'])
+# def disp(msg):
 #     token = "34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a"
 #     client = PyCAI(token)
 
@@ -83,15 +24,80 @@ if __name__ == '__main__':
 #     else:
 #         tgt = participants[1]['user']['username']
 
-#     data = client.chat.send_message(
-#         chat['external_id'], tgt, msg
-#     )
+#     data = client.chat.send_message(chat['external_id'], tgt, msg)
 
 #     name = data['src_char']['participant']['name']
 #     text = data['replies'][0]['text']
 
-#     return jsonify({'reply': text})
-#     #return text
+#     return jsonify({'data': text})
 
-# if _name_ == '_main_':
-#     app.run(debug=True)
+# @app.route('/chat', methods=['POST'])
+# def chat():
+#     if request.method == 'POST' and 'msg' in request.json:
+#         msg = request.json['msg']
+#         token = "34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a"
+#         client = PyCAI(token)
+
+#         char = "AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4"
+
+#         chat = client.chat.get_chat(char)
+#         participants = chat['participants']
+
+#         if not participants[0]['is_human']:
+#             tgt = participants[0]['user']['username']
+#         else:
+#             tgt = participants[1]['user']['username']
+
+#         data = client.chat.send_message(chat['external_id'], tgt, msg)
+
+#         name = data['src_char']['participant']['name']
+#         text = data['replies'][0]['text']
+
+#         return jsonify({'reply': text})
+#     else:
+#         return jsonify({'error': 'Invalid request or missing "msg" in JSON payload'})
+
+# if __name__ == '__main__':
+#     app.run(debug=False,host='0.0.0.0')
+
+
+# New Code
+
+from flask import Flask, jsonify, request
+from characterai import PyCAI
+
+app = Flask(_name_)
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    msg = request.json['msg']
+
+    token = "34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a"
+    client = PyCAI(token)
+
+    char = "AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4"
+
+    # chat = client.chat.get_chat(char)
+    # participants = chat['participants']
+
+    chat = client.chat.get_chat(chat)
+    print(chat)
+
+    
+    if not participants[0]['is_human']:
+        tgt = participants[0]['user']['username']
+    else:
+        tgt = participants[1]['user']['username']
+
+    data = client.chat.send_message(
+        chat['external_id'], tgt, msg
+    )
+
+    name = data['src_char']['participant']['name']
+    text = data['replies'][0]['text']
+
+    return jsonify({'reply': text})
+    #return text
+
+if _name_ == '_main_':
+  app.run(debug=False,host='0.0.0.0')
