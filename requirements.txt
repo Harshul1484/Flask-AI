@@ -1,6 +1,6 @@
 blinker==1.6.2
 certifi==2023.7.22
-characterai==0.8.0
+characterai
 charset-normalizer==2.0.0
 click==8.1.7
 colorama==0.4.4
