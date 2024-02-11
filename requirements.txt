@@ -15,7 +15,7 @@ numpy==1.21.5
 Pillow==9.0.0
 proglog==0.1.10
 requests==2.26.0
-tls-client==1.0.1
+tls-client==0.2.2
 tqdm==4.62.3
 urllib3==1.26.7
 websockets==10.0
