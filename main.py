@@ -87,6 +87,9 @@ def home():
     if request.method == 'GET':
         data = "hello world"
         return jsonify({'data': data})
+    else:
+        return jsonify({'error': 'Invalid request method'})
+
 
 @app.route('/chat', methods=['POST'])
 def chat():
