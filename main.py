@@ -9,25 +9,25 @@ def home():
         data = "hello world"
         return jsonify({'data': data})
 
-@app.route('/chat/<string:msg>', methods=['GET'])
-def disp(msg):
-    token = "34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a"
-    client = PyCAI(token)
+# @app.route('/chat/<string:msg>', methods=['GET'])
+# def disp(msg):
+#     token = "34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a"
+#     client = PyCAI(token)
 
-    char = "AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4"
+#     char = "AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4"
 
-    chat = client.chat.get_chat(char)
-    participants = chat['participants']
+#     chat = client.chat.get_chat(char)
+#     participants = chat['participants']
 
-    if not participants[0]['is_human']:
-        tgt = participants[0]['user']['username']
-    else:
-        tgt = participants[1]['user']['username']
+#     if not participants[0]['is_human']:
+#         tgt = participants[0]['user']['username']
+#     else:
+#         tgt = participants[1]['user']['username']
 
-    data = client.chat.send_message(chat['external_id'], tgt, msg)
+#     data = client.chat.send_message(chat['external_id'], tgt, msg)
 
-    name = data['src_char']['participant']['name']
-    text = data['replies'][0]['text']
+#     name = data['src_char']['participant']['name']
+#     text = data['replies'][0]['text']
 
     return jsonify({'data': text})
 
