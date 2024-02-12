@@ -3,7 +3,7 @@ from characterai import PyCAI
 
 app = Flask(__name__)
 
-@app.route('/', methods=['POST'])
+@app.route('/abc', methods=['POST'])
 def chat():
     if request.method == 'POST' and 'msg' in request.json:
         msg = request.json['msg']
