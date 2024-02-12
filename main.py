@@ -8,9 +8,18 @@ def home():
     if request.method == 'GET':
         data = "34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a"
         return jsonify({'data': data})
-    else if request.method == 'POST' and 'msg' in request.json:
+    elif request.method == 'POST' and 'msg' in request.json:
         msg = request.json['msg']
-        data = "POST"
+        
+        token = '34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a'
+        client = PyCAI(token)
+
+        char = 'AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4'
+
+        chat = client.chat.get_chat(char)
+        participants = chat['participants']
+        
+        data = msg
         return jsonify({'data': data})
     else:
         data = "POST"
