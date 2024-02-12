@@ -16,10 +16,10 @@ def home():
 
         char = 'AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4'
 
-        chat = client.chat.get_chat(char)
+        chat = client.chat2.get_chat(char)
         participants = chat['participants']
         
-        data = msg
+        data = chat
         return jsonify({'data': data})
     else:
         data = "POST"
