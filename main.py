@@ -6,7 +6,7 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'GET':
-        data = "hello world"
+        data = "34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a"
         return jsonify({'data': data})
 
 @app.route('/chat/<string:msg>', methods=['GET'])
