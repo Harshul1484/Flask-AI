@@ -4,7 +4,6 @@ import logging
 
 app = Flask(__name__)
 
-# Set up logging
 logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
 
