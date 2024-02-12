@@ -3,60 +3,14 @@ from characterai import PyCAI
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET', 'POST'])
-def home():
-    if request.method == 'GET':
-        data = "34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a"
-        return jsonify({'data': data})
-    elif request.method == 'POST' and 'msg' in request.json:
-        msg = request.json['msg']
-        
-        token = 'cce81c57a2260bdbb1c89782e9a78b544d66e651'
-        client = PyCAI(token)
-
-        char = 'AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4'
-
-        chat = client.chat2.get_chat(char)
-        participants = chat['participants']
-        
-        data = chat
-        return jsonify({'data': data})
-    else:
-        data = "POST"
-        return jsonify({'data': data})
-
-@app.route('/chat/', methods=['GET'])
-def disp():
-    msg = "wassup"
-    token = 'cce81c57a2260bdbb1c89782e9a78b544d66e651'
-    client = PyCAI(token)
-
-    char = 'AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4'
-
-    chat = client.chat.get_chat(char)
-    print(chat)
-    participants = chat['participants']
-
-    if not participants[0]['is_human']:
-        tgt = participants[0]['user']['username']
-    else:
-        tgt = participants[1]['user']['username']
-
-    data = client.chat.send_message(chat['external_id'], tgt, msg)
-
-    name = data['src_char']['participant']['name']
-    text = data['replies'][0]['text']
-
-    return jsonify({'data': text})
-
-@app.route('/chat', methods=['POST'])
+@app.route('/', methods=['POST'])
 def chat():
     if request.method == 'POST' and 'msg' in request.json:
         msg = request.json['msg']
         token = 'cce81c57a2260bdbb1c89782e9a78b544d66e651'
         client = PyCAI(token)
 
-        char = 'AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4'
+        char = '4WOVrCApi4JYwfYwU2e5eDeFalLOkGBw6IfUZPX1XVQ'
 
         chat = client.chat.get_chat(char)
         participants = chat['participants']
