@@ -35,10 +35,10 @@ def disp(msg):
 def chat():
     if request.method == 'POST' and 'msg' in request.json:
         msg = request.json['msg']
-        token = "34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a"
+        token = 34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a
         client = PyCAI(token)
 
-        char = "AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4"
+        char = AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4
 
         chat = client.chat.get_chat(char)
         participants = chat['participants']
