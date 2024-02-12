@@ -1,27 +1,47 @@
 from flask import Flask, jsonify, request
 from characterai import PyCAI
-import logging
 
 app = Flask(__name__)
 
-logging.basicConfig()
-logging.getLogger().setLevel(logging.DEBUG)
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    if request.method == 'GET':
+        data = "hello world"
+        return jsonify({'data': data})
 
-@app.route('/abc', methods=['POST'])
+@app.route('/chat/<string:msg>', methods=['GET'])
+def disp(msg):
+    token = "34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a"
+    client = PyCAI(token)
+
+    char = "AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4"
+
+    chat = client.chat.get_chat(char)
+    participants = chat['participants']
+
+    if not participants[0]['is_human']:
+        tgt = participants[0]['user']['username']
+    else:
+        tgt = participants[1]['user']['username']
+
+    data = client.chat.send_message(chat['external_id'], tgt, msg)
+
+    name = data['src_char']['participant']['name']
+    text = data['replies'][0]['text']
+
+    return jsonify({'data': text})
+
+@app.route('/chat', methods=['POST'])
 def chat():
     if request.method == 'POST' and 'msg' in request.json:
         msg = request.json['msg']
-        logging.debug(f"Received message: {msg}")
-        
-        token = 'cce81c57a2260bdbb1c89782e9a78b544d66e651'
+        token = "34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a"
         client = PyCAI(token)
 
-        char = '4WOVrCApi4JYwfYwU2e5eDeFalLOkGBw6IfUZPX1XVQ'
-        logging.debug(f"Character ID: {char}")
+        char = "AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4"
 
         chat = client.chat.get_chat(char)
         participants = chat['participants']
-        logging.debug(f"Participants: {participants}")
 
         if not participants[0]['is_human']:
             tgt = participants[0]['user']['username']
@@ -29,15 +49,14 @@ def chat():
             tgt = participants[1]['user']['username']
 
         data = client.chat.send_message(chat['external_id'], tgt, msg)
-        logging.debug(f"Response data: {data}")
 
         name = data['src_char']['participant']['name']
         text = data['replies'][0]['text']
-        logging.debug(f"Reply: {text}")
 
         return jsonify({'reply': text})
     else:
         return jsonify({'error': 'Invalid request or missing "msg" in JSON payload'})
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0')
+    app.run(debug=False,host='0.0.0.0')
+
