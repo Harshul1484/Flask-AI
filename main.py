@@ -11,7 +11,7 @@ def home():
     elif request.method == 'POST' and 'msg' in request.json:
         msg = request.json['msg']
         
-        token = '34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a'
+        token = 'cce81c57a2260bdbb1c89782e9a78b544d66e651'
         client = PyCAI(token)
 
         char = 'AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4'
@@ -28,7 +28,7 @@ def home():
 @app.route('/chat/', methods=['GET'])
 def disp():
     msg = "wassup"
-    token = '34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a'
+    token = 'cce81c57a2260bdbb1c89782e9a78b544d66e651'
     client = PyCAI(token)
 
     char = 'AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4'
@@ -53,7 +53,7 @@ def disp():
 def chat():
     if request.method == 'POST' and 'msg' in request.json:
         msg = request.json['msg']
-        token = '34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a'
+        token = 'cce81c57a2260bdbb1c89782e9a78b544d66e651'
         client = PyCAI(token)
 
         char = 'AbuIXFqY7EsLrOjUDLR0bDNYwqU6MDQyAKtzGIMeLI4'
