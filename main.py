@@ -11,7 +11,7 @@ def home():
 
 @app.route('/chat/<string:msg>', methods=['GET'])
 def disp(msg):
-    token = "34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a"
+    token = "4WOVrCApi4JYwfYwU2e5eDeFalLOkGBw6IfUZPX1XVQ"
     client = PyCAI(token)
 
     char = "cce81c57a2260bdbb1c89782e9a78b544d66e651"
@@ -35,7 +35,7 @@ def disp(msg):
 def chat():
     if request.method == 'POST' and 'msg' in request.json:
         msg = request.json['msg']
-        token = "34f5788ba1f0cfcb8b8f03437c732bad6e0abd2a"
+        token = "4WOVrCApi4JYwfYwU2e5eDeFalLOkGBw6IfUZPX1XVQ"
         client = PyCAI(token)
 
         char = "cce81c57a2260bdbb1c89782e9a78b544d66e651"
