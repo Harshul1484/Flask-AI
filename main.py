@@ -1,7 +1,11 @@
+import os
 from flask import Flask, jsonify, request
 from characterai import PyCAI
 
 app = Flask(__name__)
+
+# Retrieve the API token from environment variable
+token = os.environ.get('CHARACTERAI_API_TOKEN')
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -11,7 +15,6 @@ def home():
 
 @app.route('/chat/<string:msg>', methods=['GET'])
 def disp(msg):
-    token = "4WOVrCApi4JYwfYwU2e5eDeFalLOkGBw6IfUZPX1XVQ"
     client = PyCAI(token)
 
     char = "cce81c57a2260bdbb1c89782e9a78b544d66e651"
@@ -35,7 +38,6 @@ def disp(msg):
 def chat():
     if request.method == 'POST' and 'msg' in request.json:
         msg = request.json['msg']
-        token = "4WOVrCApi4JYwfYwU2e5eDeFalLOkGBw6IfUZPX1XVQ"
         client = PyCAI(token)
 
         char = "cce81c57a2260bdbb1c89782e9a78b544d66e651"
@@ -58,5 +60,4 @@ def chat():
         return jsonify({'error': 'Invalid request or missing "msg" in JSON payload'})
 
 if __name__ == '__main__':
-    app.run(debug=False,host='0.0.0.0')
-
+    app.run(debug=False, host='0.0.0.0')
