@@ -19,7 +19,7 @@ client = PyAsyncCAI2(owner_id)
 
 async def send_message(message):
     async with client.connect(owner_id) as chat2:
-        return await chat2.send_message(char, chat, message, aut_set, Return_name=True)
+        return await chat2.send_message(char, chat, message, aut_set, Return_name=False)
 
 @app.route('/chat', methods=['POST'])
 def post_chat():
