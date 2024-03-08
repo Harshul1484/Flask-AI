@@ -29,15 +29,13 @@ def disp(msg):
                 tgt = participant['user']['username']
                 break
         else:
-            tgt = None
-
-        if tgt:
-            data = client.chat.send_message(chat['external_id'], tgt, msg)
-            name = data['src_char']['participant']['name']
-            text = data['replies'][0]['text']
-            return jsonify({'data': text})
-        else:
             return jsonify({'error': 'No non-human participant found in the chat'})
+
+        data = client.chat.send_message(chat['external_id'], tgt, msg)
+        name = data['src_char']['participant']['name']
+        text = data['replies'][0]['text']
+
+        return jsonify({'data': text})
     except Exception as e:
         return jsonify({'error': str(e)})
 
@@ -53,15 +51,13 @@ def chat():
                     tgt = participant['user']['username']
                     break
             else:
-                tgt = None
-
-            if tgt:
-                data = client.chat.send_message(chat['external_id'], tgt, msg)
-                name = data['src_char']['participant']['name']
-                text = data['replies'][0]['text']
-                return jsonify({'reply': text})
-            else:
                 return jsonify({'error': 'No non-human participant found in the chat'})
+
+            data = client.chat.send_message(chat['external_id'], tgt, msg)
+            name = data['src_char']['participant']['name']
+            text = data['replies'][0]['text']
+
+            return jsonify({'reply': text})
         else:
             return jsonify({'error': 'Invalid request or missing "msg" in JSON payload'})
     except Exception as e:
