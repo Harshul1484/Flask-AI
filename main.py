@@ -7,14 +7,8 @@ app = Flask(__name__)
 # Retrieve the API token from environment variable
 token = os.environ.get('CHARACTERAI_API_TOKEN')
 
-# Read the .env file and set environment variables
-with open('.env') as f:
-    for line in f:
-        key, value = line.strip().split('=', 1)
-        os.environ[key] = value
-
-# Retrieve the chat ID from environment variable
-char = os.environ.get('CHARACTERAI_CHAT_ID')
+# Retrieve the char ID from environment variable
+char = os.environ.get('CHARACTERAI_CHAR_ID')
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
