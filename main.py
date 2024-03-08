@@ -4,8 +4,14 @@ from characterai import PyCAI
 
 app = Flask(__name__)
 
-# Retrieve the API token and char from environment variables
+# Accessing environment variables
 token = os.environ.get('CHARACTERAI_API_TOKEN')
+char = os.environ.get('CHARACTERAI_CHAR')
+
+if not token or not char:
+    raise ValueError("Missing CHARACTERAI_TOKEN or CHARACTERAI_CHAR environment variable.")
+
+client = PyCAI(token)
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -15,10 +21,6 @@ def home():
 
 @app.route('/chat/<string:msg>', methods=['GET'])
 def disp(msg):
-    client = PyCAI(token)
-
-    char = os.environ.get('CHARACTERAI_CHAR_ID')
-
     chat = client.chat.get_chat(char)
     participants = chat['participants']
 
@@ -38,9 +40,6 @@ def disp(msg):
 def chat():
     if request.method == 'POST' and 'msg' in request.json:
         msg = request.json['msg']
-        client = PyCAI(token)
-
-        char = os.environ.get('CHARACTERAI_CHAR_ID')
 
         chat = client.chat.get_chat(char)
         participants = chat['participants']
@@ -60,4 +59,4 @@ def chat():
         return jsonify({'error': 'Invalid request or missing "msg" in JSON payload'})
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0')
+    app.run(debug=True)
