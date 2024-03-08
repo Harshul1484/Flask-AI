@@ -1,11 +1,17 @@
 import os
+from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from characterai import PyCAI
 
 app = Flask(__name__)
 
-# the Retrieve the API token from environment variable
+# Load environment variables from .env file
+load_dotenv()
+
+# Retrieve the API token from the environment variable
 token = os.environ.get('CHARACTERAI_API_TOKEN')
+# Retrieve the value of char from the environment variable
+char = os.environ.get('CHARACTERAI_CHAR')
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -16,8 +22,6 @@ def home():
 @app.route('/chat/<string:msg>', methods=['GET'])
 def disp(msg):
     client = PyCAI(token)
-
-    char = "zb7I4U9OYfewmEgOWLBHScefPeELkm1J-_GZDjHLY1M"
 
     chat = client.chat.get_chat(char)
     participants = chat['participants']
@@ -39,8 +43,6 @@ def chat():
     if request.method == 'POST' and 'msg' in request.json:
         msg = request.json['msg']
         client = PyCAI(token)
-
-        char = "zb7I4U9OYfewmEgOWLBHScefPeELkm1J-_GZDjHLY1M"
 
         chat = client.chat.get_chat(char)
         participants = chat['participants']
