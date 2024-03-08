@@ -4,7 +4,7 @@ from characterai import PyCAI
 
 app = Flask(__name__)
 
-# Retrieve the API token from environment variable
+# the Retrieve the API token from environment variable
 token = os.environ.get('CHARACTERAI_API_TOKEN')
 
 @app.route('/', methods=['GET', 'POST'])
