@@ -1,62 +1,34 @@
-import os
+import asyncio
 from flask import Flask, jsonify, request
-from characterai import PyCAI
+from charaiPY.AsyncPyCAI2 import PyAsyncCAI2
 
 app = Flask(__name__)
 
-# Accessing environment variables
-token = os.environ.get('CHARACTERAI_API_TOKEN')
-char = os.environ.get('CHARACTERAI_CHAR')
+owner_id = "edbf12f4a748db6bcadfbd8505cdb8c764351299"
+char = "7yDt2WH6Y_OpaAV4GsxKcY5xIQ8QT5M0kgpDQ6VAflI"
+chat = "d2cc5852-0e70-417f-93e9-d3119b23d868"
+author_id = "486814206"
 
-if not token or not char:
-    raise ValueError("Missing CHARACTERAI_TOKEN or CHARACTERAI_CHAR environment variable.")
+aut_set ={
+    "author_id": "486814206",
+    "is_human": True,
+    "name": "Are-you-feeling-okay"
+}
 
-client = PyCAI(token)
+client = PyAsyncCAI2(owner_id)
 
-@app.route('/', methods=['GET', 'POST'])
-def home():
-    if request.method == 'GET':
-        data = "hello world"
-        return jsonify({'data': data})
-
-@app.route('/chat/<string:msg>', methods=['GET'])
-def disp(msg):
-    chat = client.chat.get_chat(char)
-    participants = chat['participants']
-
-    if not participants[0]['is_human']:
-        tgt = participants[0]['user']['username']
-    else:
-        tgt = participants[1]['user']['username']
-
-    data = client.chat.send_message(chat['external_id'], tgt, msg)
-
-    name = data['src_char']['participant']['name']
-    text = data['replies'][0]['text']
-
-    return jsonify({'data': text})
+async def send_message(message):
+    async with client.connect(owner_id) as chat2:
+        return await chat2.send_message(char, chat, message, aut_set, Return_name=True)
 
 @app.route('/chat', methods=['POST'])
-def chat():
-    if request.method == 'POST' and 'msg' in request.json:
-        msg = request.json['msg']
-
-        chat = client.chat.get_chat(char)
-        participants = chat['participants']
-
-        if not participants[0]['is_human']:
-            tgt = participants[0]['user']['username']
-        else:
-            tgt = participants[1]['user']['username']
-
-        data = client.chat.send_message(chat['external_id'], tgt, msg)
-
-        name = data['src_char']['participant']['name']
-        text = data['replies'][0]['text']
-
-        return jsonify({'reply': text})
+def post_chat():
+    if request.method == 'POST' and 'message' in request.json:
+        message = request.json['message']
+        response = asyncio.run(send_message(message))
+        return jsonify({"response": response})
     else:
-        return jsonify({'error': 'Invalid request or missing "msg" in JSON payload'})
+        return jsonify({"error": "Invalid request or missing 'message' in JSON payload."})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
