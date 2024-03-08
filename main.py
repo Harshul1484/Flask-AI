@@ -17,7 +17,7 @@ def home():
 def disp(msg):
     client = PyCAI(token)
 
-    char = "7yDt2WH6Y_OpaAV4GsxKcY5xIQ8QT5M0kgpDQ6VAflI"
+    char = "zb7I4U9OYfewmEgOWLBHScefPeELkm1J-_GZDjHLY1M"
 
     chat = client.chat.get_chat(char)
     participants = chat['participants']
@@ -40,7 +40,7 @@ def chat():
         msg = request.json['msg']
         client = PyCAI(token)
 
-        char = "7yDt2WH6Y_OpaAV4GsxKcY5xIQ8QT5M0kgpDQ6VAflI"
+        char = "zb7I4U9OYfewmEgOWLBHScefPeELkm1J-_GZDjHLY1M"
 
         chat = client.chat.get_chat(char)
         participants = chat['participants']
