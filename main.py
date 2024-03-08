@@ -1,17 +1,17 @@
 import os
-from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from characterai import PyCAI
 
 app = Flask(__name__)
 
-# Load environment variables from .env file
-load_dotenv()
-
-# Retrieve the API token from the environment variable
+# Retrieve the API token and char from environment variables
 token = os.environ.get('CHARACTERAI_API_TOKEN')
-# Retrieve the value of char from the environment variable
 char = os.environ.get('CHARACTERAI_CHAR')
+
+if not token or not char:
+    raise ValueError("Please set the CHARACTERAI_API_TOKEN and CHARACTERAI_CHAR environment variables")
+
+client = PyCAI(token)
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -21,45 +21,51 @@ def home():
 
 @app.route('/chat/<string:msg>', methods=['GET'])
 def disp(msg):
-    client = PyCAI(token)
+    try:
+        chat = client.chat.get_chat(char)
+        participants = chat.get('participants', [])
+        for participant in participants:
+            if not participant['is_human']:
+                tgt = participant['user']['username']
+                break
+        else:
+            tgt = None
 
-    chat = client.chat.get_chat(char)
-    participants = chat['participants']
-
-    if not participants[0]['is_human']:
-        tgt = participants[0]['user']['username']
-    else:
-        tgt = participants[1]['user']['username']
-
-    data = client.chat.send_message(chat['external_id'], tgt, msg)
-
-    name = data['src_char']['participant']['name']
-    text = data['replies'][0]['text']
-
-    return jsonify({'data': text})
+        if tgt:
+            data = client.chat.send_message(chat['external_id'], tgt, msg)
+            name = data['src_char']['participant']['name']
+            text = data['replies'][0]['text']
+            return jsonify({'data': text})
+        else:
+            return jsonify({'error': 'No non-human participant found in the chat'})
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 @app.route('/chat', methods=['POST'])
 def chat():
-    if request.method == 'POST' and 'msg' in request.json:
-        msg = request.json['msg']
-        client = PyCAI(token)
+    try:
+        if request.method == 'POST' and 'msg' in request.json:
+            msg = request.json['msg']
+            chat = client.chat.get_chat(char)
+            participants = chat.get('participants', [])
+            for participant in participants:
+                if not participant['is_human']:
+                    tgt = participant['user']['username']
+                    break
+            else:
+                tgt = None
 
-        chat = client.chat.get_chat(char)
-        participants = chat['participants']
-
-        if not participants[0]['is_human']:
-            tgt = participants[0]['user']['username']
+            if tgt:
+                data = client.chat.send_message(chat['external_id'], tgt, msg)
+                name = data['src_char']['participant']['name']
+                text = data['replies'][0]['text']
+                return jsonify({'reply': text})
+            else:
+                return jsonify({'error': 'No non-human participant found in the chat'})
         else:
-            tgt = participants[1]['user']['username']
-
-        data = client.chat.send_message(chat['external_id'], tgt, msg)
-
-        name = data['src_char']['participant']['name']
-        text = data['replies'][0]['text']
-
-        return jsonify({'reply': text})
-    else:
-        return jsonify({'error': 'Invalid request or missing "msg" in JSON payload'})
+            return jsonify({'error': 'Invalid request or missing "msg" in JSON payload'})
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0')
